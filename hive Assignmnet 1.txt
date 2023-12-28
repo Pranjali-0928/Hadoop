@@ -1,0 +1,106 @@
+hive Assignmnet 1
+
+EMP1.txt
+100,AAA,IT,2000 
+200,BBB,IT,3000 
+300,CCC,Admin,2500 
+400,DDD,Admin,500
+500,EEE,IT,2000 
+600,FFF,IT,3000 
+700,GGG,Admin,2500 
+800,HHH,Admin,500
+
+EMPDetails.txt (id:int, city:string, pincode:int)
+100,Pune,20014 
+200,Delhi,20015
+300,Pune,20014 
+400,Pune,20014
+500,Pune,20014
+600,Delhi,20015 
+700,Delhi,20015 
+800,Delhi,20015
+
+hive
+show databases;
+
+Create database mydatabase;
+
+Use mydatabase;
+
+Create external table emp (id int, name string, dept string, salary int) Row format delimited fields terminated by ',' ;
+
+Load data local inpath '/home/cloudera/EMP1.txt' into table emp;
+
+Select * from emp;
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Assignmnet 2
+Create EMPDetails folder in HDFS and copy EMPDetails file in it
+hdfs dfs -mkdir /user/cloudera/EMPDetails
+hdfs dfs -put /user/cloudera/EMPDetails/EMPDetails.txt
+
+Use default database
+use default;
+
+
+Create EMPDetails managed table
+
+Create table EMPDetails (id int, city string, pincode int) row format delimited fieldsterminated by ',' location '/user/cloudera/EMPDetails'
+
+
+Select * from EMPDetails
+Drop table Empdetails
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& 
+
+Assignment 3 Static Partition
+
+first create file in local system
+- Emp1.txt
+1,AAA,1000,IT
+2,BBB,2000,IT
+3,CCC,3000,Admin
+4,DDD,4000,Admin
+
+
+-Create table emp_new 
+Create external table emp_new(id int, name string, salary int, dept string) Row format delimited fields terminated by ',' ;
+
+- Load emp1.txt file in emp_new 
+Load data local inpath ‘/home/cloudera/emp1.txt’ into table emp_new;
+
+- Create partition table emppart
+Create external table emppart (id int, name string, salary int) partitioned by (dept string) row format delimited fields terminated by ',' ;
+
+- Load data into emppart for dept=’IT’ partition from emp_new table
+Insert into table emppart partition (dept='IT') select id,name,salary from emp_new where dept='IT'
+
+- Load data into emppart for dept=’Admin’ partition from emp_new table
+Insert into table emppart partition (dept='Admin') select id, name, salary from emp_new where dept='Admin'
+
+Select * from emp_new
+- Check HDFS folder location /user/hive/warehouse/emp_new
+
+####################################################################################################
+
+
+WC count 
+
+
+#######################################################################################################
+snapshot 
+
+
+#################################################################################################
+simple cammand in hadoop
+
+###################################################################################
+
+
+
+
+
+
+
+
