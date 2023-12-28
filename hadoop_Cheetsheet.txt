@@ -1,0 +1,77 @@
+WordCount Program
+
+Make a file in local directory 
+--->>> touch input
+	>sandip
+	>sandip
+	>sandip
+	>soham
+	>soham
+
+Now ,,make a directory in hdfs 
+-->> hdfs dfs -mkdir /user/cloudera/test
+
+check file created or not..
+--> hdfs dfs -ls
+
+Now put our local file in the hdfs directory.
+--> hdfs  dfs -put input /user/cloudera/test/
+
+check the file put or not,,,
+--> hdfs dfs -ls /user/cloudera/test/ | grep input.txt
+
+Now go to browser and paste,
+https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-mapreduce-examples/2.7.1/ 
+and download the the hadoop-mapreduce-examples/2.7.1.jar file in root directory..
+
+change the permission to hadoop-mapreduce-examples/2.7.1.jar
+--> chmod 777 hadoop-mapreduce-examples/2.7.1.jar
+
+now 
+
+--> yarn jar hadoop-mapreduce-examples-2.7.1.jar wordcount -Dmapreduce.job.reduce=2 /user/cloudera/test    /user/cloudera/out
+
+go to HDFS -> file browser -> user -> cloudera -> and check the out folder 
+and now 
+---> hdfs dfs -cat /user/cloudera/out/part-r-00000
+
+OUTPUT ,,,,
+
+Sandip 3
+Soham  2
+
+
+Hive Program with Load 
+
+Make a file ,
+--> vi emp1.txt
+	 add data
+		100,AAA,IT,2000
+		200,BBB,IT,3000
+		300,CCC,Admin,2500
+		400,DDD,Admin,500
+		500,EEE,IT,2000
+		600,FFF,IT,3000
+		700,GGG,Admin,2500
+		800,HHH,Admin,500
+
+Now  Create database mydatabase
+Create database if not exists mydatabase
+- Check HDFS folder /user/hive/warehouse/
+It contains mydatabase.db folder
+
+- Create external emp table in mydatabase
+Use mydatabase;
+Create external table emp (id int, name string, dept string,
+salary string) Row format delimited fields terminated by ‘,’
+
+- Load data into emp table
+Load data local inpath ‘<LocalBasePath>/EMP1.txt’ into table emp;
+- Check /user/hive/warehouse/ mydatabase.db/emp
+It contains EMP1.txt file
+
+Select * from emp;
+Drop table emp;
+- Check /user/hive/warehouse/mydatabase.db
+emp/EMP1.txt file is present
+
